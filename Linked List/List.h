@@ -4,60 +4,6 @@
 
 using namespace std;
 
-/*
-class List {
-private:
-	struct Node {
-		int data;
-		Node* next_ptr;
-	};
-	Node* HEAD;
-	int count;
-public:
-	List() : HEAD(nullptr), count(0) {}
-	~List() {
-		while (HEAD != nullptr) {
-			Node* tmp = HEAD->next_ptr;
-			delete HEAD;
-			HEAD = tmp;
-		}
-		count = 0;  // правильно ли?
-	}
-	int getCount() { return count; }
-	bool isEmpty() { return HEAD == nullptr; }
-
-	Node* Add(int val, Node* node = nullptr) {
-		Node* tmp = new Node();
-		tmp->data = val;
-		count++;
-		tmp->next_ptr = node->next_ptr;
-		node->next_ptr = tmp;
-		return tmp;
-	}
-	
-	void Display() {
-		if (isEmpty()) {
-			cout << "Список пуст" << endl;
-			return;
-		}
-		Node* tmp = HEAD;
-		do {
-			cout << tmp->data << " ";
-			tmp = tmp->next_ptr;
-		} while (tmp != nullptr);
-		cout << endl;
-	}
-};
-
-
-template <typename T>
-Node* List<T>::Add(T val, Node* node) {
-
-}
-	Почему так не работает?
-*/
-
-
 struct Node {
 	int data;
 	Node* next;
@@ -67,7 +13,7 @@ class List {
 public:
 	Node* Head = nullptr;
 
-	void push_back(int data) {
+	void push_to_begin(int data) {
 		Node* tmp = new Node();
 		tmp->data = data;
 		tmp->next = Head;
@@ -80,11 +26,20 @@ public:
 		while (cur != nullptr) {
 			if (cur->next == nullptr)
 				cout << cur->data;
-			else 
+			else
 				cout << cur->data << " --> ";
 			cur = cur->next;
 		}
 		cout << endl;
+	}
+
+	Node* Prev(Node* node) {
+		if (Head == nullptr || node == Head)
+			return nullptr;
+		Node* tmp = Head;
+		while (tmp->next != node)
+			tmp = tmp->next;
+		return tmp;
 	}
 
 	Node* add(int val, Node* node) {
@@ -94,6 +49,23 @@ public:
 		node->next = elem;
 		return elem;
 	}
+
+	Node* del(Node* node) {
+		if (node == nullptr)
+			return nullptr;
+		if (node == Head) {
+			Head = node->next;
+			delete node;
+			return Head;
+		}
+
+		Node* prev = Prev(node);
+		prev->next = node->next;
+		delete node;
+		return prev;
+	}
 };
+
+
 
 #endif LIST__H
